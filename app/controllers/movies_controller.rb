@@ -2,6 +2,7 @@
 class MoviesController < ApplicationController
 
   def index
+    set_session_params
     @all_ratings = Movie.all_ratings
     @movies = sort_and_ratings
   end
@@ -58,4 +59,17 @@ class MoviesController < ApplicationController
 
     return "#{sort_by} ASC"
   end
+
+  def set_session_params
+    if(params[:sort] || params[:ratings])
+      return
+    elsif(session[:sort] && session[:ratings])
+      redirect_to movies_path(sort: session[:sort], rating: params[:ratings])
+    elsif(session[:sort])
+      redirect_to movies_path(sort: session[:sort])
+    elsif(session[:ratings])
+      redirect_to movies_path(ratings: params[:ratings])
+    end
+  end
+
 end
