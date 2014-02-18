@@ -42,8 +42,14 @@ class MoviesController < ApplicationController
   end
 
   def sort_and_ratings
-    if(params[:sort])
+    if params[:ratings] && params[:sort]
+      Movie.where(rating: get_ratings).order(sort_column)
+    elsif params[:ratings]
+      Movie.where(rating: get_ratings)
+    elsif(params[:sort])
       Movie.order(sorter)
+    else
+      Movie.all
     end
   end
 
@@ -58,6 +64,14 @@ class MoviesController < ApplicationController
     end
 
     return "#{sort_by} ASC"
+  end
+
+  def get_ratings
+    if params[:ratings]
+      params[:ratings].keys
+    elsif session[:ratings]
+      session[:ratings].keys
+    end
   end
 
   def set_session_params
