@@ -2,7 +2,8 @@
 class MoviesController < ApplicationController
 
   def index
-    @movies = Movie.all
+    @all_ratings = Movie.all_ratings
+    @movies = sort_and_ratings
   end
 
   def show
@@ -39,4 +40,22 @@ class MoviesController < ApplicationController
     redirect_to movies_path
   end
 
+  def sort_and_ratings
+    if(params[:sort])
+      Movie.order(sorter)
+    end
+  end
+
+  def sorter
+    sort_by = params[:sort]
+    if(sort_by == 'title')
+      @title_class = "hilite"
+      @release_date_class = "release_date"
+    elsif(sort_by == 'release_date')
+      @title_class = "title"
+      @release_date_class = "hilite"
+    end
+
+    return "#{sort_by} ASC"
+  end
 end
