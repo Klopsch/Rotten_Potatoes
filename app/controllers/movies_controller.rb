@@ -2,9 +2,7 @@
 class MoviesController < ApplicationController
 
   def index
-    set_session_params
-    @all_ratings = Movie.all_ratings
-    @movies = sort_and_ratings
+    @movies = Movie.all
   end
 
   def show
@@ -39,51 +37,6 @@ class MoviesController < ApplicationController
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
-  end
-
-  def sort_and_ratings
-    if params[:ratings] && params[:sort]
-      Movie.where(rating: get_ratings).order(sort_column)
-    elsif params[:ratings]
-      Movie.where(rating: get_ratings)
-    elsif(params[:sort])
-      Movie.order(sorter)
-    else
-      Movie.all
-    end
-  end
-
-  def sorter
-    sort_by = params[:sort]
-    if(sort_by == 'title')
-      @title_class = "hilite"
-      @release_date_class = "release_date"
-    elsif(sort_by == 'release_date')
-      @title_class = "title"
-      @release_date_class = "hilite"
-    end
-
-    return "#{sort_by} ASC"
-  end
-
-  def get_ratings
-    if params[:ratings]
-      params[:ratings].keys
-    elsif session[:ratings]
-      session[:ratings].keys
-    end
-  end
-
-  def set_session_params
-    if(params[:sort] || params[:ratings])
-      return
-    elsif(session[:sort] && session[:ratings])
-      redirect_to movies_path(sort: session[:sort], rating: params[:ratings])
-    elsif(session[:sort])
-      redirect_to movies_path(sort: session[:sort])
-    elsif(session[:ratings])
-      redirect_to movies_path(ratings: params[:ratings])
-    end
   end
 
 end
