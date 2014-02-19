@@ -7,7 +7,7 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    @movies = sort
   end
 
   def new
@@ -41,26 +41,22 @@ class MoviesController < ApplicationController
   def sort
     if(params[:sort_by])
       # If sort by has a value, call sorter
-      Movie.order(sorter)
+      sort_by = params[:sort_by]
+      if(sort_by == "title")
+        # Sorts by title and hilites Movie Title
+        @title_class = "hilite"
+        @release_date_class = "release_date"
+      elsif sorter == "release_date"
+        # Sorts by release date and hilites Release Date
+        @title_class = "title"
+        @release_date_class = "hilite"
+      end
+      # Return string for sorting
+      Movie.order("#{sort_by} ASC")
     else
       # Else return normal list of movies
       Movie.all
     end
-  end
-
-  def sorter
-    sort_by = params[:sort_by]
-    if(sort_by == "title")
-      # Sorts by title and hilites Movie Title
-      @title_class = "hilite"
-      @release_date_class = "release_date"
-    elsif sorter == "release_date"
-      # Sorts by release date and hilites Release Date
-      @title_class = "title"
-      @release_date_class = "hilite"
-    end
-    # Return string for sorting
-    "#{sort_by} ASC"
   end
 
 end
