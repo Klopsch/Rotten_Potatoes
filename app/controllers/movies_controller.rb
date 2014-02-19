@@ -46,13 +46,13 @@ class MoviesController < ApplicationController
         # Sorts by title and hilites Movie Title
         @title_class = "hilite"
         @release_date_class = "release_date"
-      elsif sorter == "release_date"
+      elsif sort_by == "release_date"
         # Sorts by release date and hilites Release Date
         @title_class = "title"
         @release_date_class = "hilite"
       end
-      # Return string for sorting
       Movie.order("#{sort_by} ASC")
+
     else
       # Else return normal list of movies
       Movie.all
