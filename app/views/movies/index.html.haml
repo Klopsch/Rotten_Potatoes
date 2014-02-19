@@ -1,17 +1,17 @@
--# This file is app/view/movies/index.html.haml
+-#  This file is app/views/movies/index.html.haml
 %h1 All Movies
 
 %table#movies
   %thead
     %tr
-      %th Movie Title
+      %th{:class => "#{@title_class}"}= link_to "Movie Title", movies_path(sort_by: "title", rating: params[:ratings]), :id = "title_header"
       %th Rating
       %th Release Date
       %th More Info
   %tbody
     - @movies.each do |movie|
       %tr
-        %td= movie.title
+        %td= movie.title 
         %td= movie.rating
         %td= movie.release_date
         %td= link_to "More about #{movie.title}", movie_path(movie)
