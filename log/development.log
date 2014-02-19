@@ -748,3 +748,27 @@ Served asset /jquery.js - 304 Not Modified (0ms)
 
 Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-02-18 22:06:44 -0400
 Served asset /jquery_ujs.js - 304 Not Modified (0ms)
+
+
+Started GET "/movies?sort_by=title" for 127.0.0.1 at 2014-02-18 22:10:56 -0400
+Connecting to database specified by database.yml
+Processing by MoviesController#index as HTML
+  Parameters: {"sort_by"=>"title"}
+  [1m[36mMovie Load (0.2ms)[0m  [1mSELECT "movies".* FROM "movies" [0m
+  Rendered movies/index.html.haml within layouts/application (18.7ms)
+Completed 500 Internal Server Error in 30ms
+
+ActionView::Template::Error (undefined local variable or method `release_date_class' for #<#<Class:0xa4fcc34>:0xa4fb244>):
+    6:     %tr
+    7:       %th{:class => "#{@title_class}"}= link_to "Movie Title", movies_path(sort_by: "title", rating: params[:ratings]), :id => "title_header"
+    8:       %th Rating
+    9:       %th{:class => "#{release_date_class}"}= link_to "Release Date", movies_path(sort_by: "release_date", rating: params[:ratings]), :id => "release_date_header"
+    10:       %th More Info
+    11:   %tbody
+    12:     - @movies.each do |movie|
+  app/views/movies/index.html.haml:9:in `_app_views_movies_index_html_haml___784329873_85934110'
+
+
+  Rendered /home/saasbook/.rvm/gems/ruby-2.1.0@railstutorial_rails_4_0/gems/actionpack-3.2.14/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.1ms)
+  Rendered /home/saasbook/.rvm/gems/ruby-2.1.0@railstutorial_rails_4_0/gems/actionpack-3.2.14/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.7ms)
+  Rendered /home/saasbook/.rvm/gems/ruby-2.1.0@railstutorial_rails_4_0/gems/actionpack-3.2.14/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (9.8ms)
