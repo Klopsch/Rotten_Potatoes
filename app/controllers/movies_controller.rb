@@ -1,4 +1,6 @@
 class MoviesController < ApplicationController
+  helper_method :check_box_toggle
+  before_filter :set_session_params
 
   def show
     id = params[:id] # retrieve movie ID from URI route
@@ -7,7 +9,9 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = sort
+    set_params_from_session
+    @all_ratings = Movie.ratings_set
+    @movies = sort_and_filter
   end
 
   def new
@@ -51,12 +55,12 @@ class MoviesController < ApplicationController
     end
   end
 
-  def sort_column
+  def sort
     sort_by = params[:sort_by]
     if(sort_by == "title")
       @title_class = "hilite"
       @release_date_class = "release_date"
-    elsif sorter == "release_date"
+    elsif(sort_by == "release_date")
       @title_class = "title"
       @release_date_class = "hilite"
     end
@@ -76,6 +80,23 @@ class MoviesController < ApplicationController
       get_ratings.include?(rating)
     else
       true
+    end
+  end
+
+  def set_session_params
+    session[:ratings] ||= params[:ratings] if params[:ratings]
+    session[:sort_by] ||= params[:sort_by] if params[:sort_by]
+  end
+
+  def set_params_from_session
+    if(params[:sort_by] || params[:ratings])
+      return
+    elsif(session[:sort_by] && session[:ratings])
+      redirect_to movies_path(sort_by: session[:sort_by], rating: params[:ratings])
+    elsif(session[:sort_by])
+      redirect_to movies_path(sort_by: session[:sort_by])
+    elsif(session[:ratings])
+      redirect_to movies_path(rating: params[:ratings])
     end
   end
 
